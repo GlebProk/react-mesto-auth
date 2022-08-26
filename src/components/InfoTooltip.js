@@ -5,7 +5,7 @@ import unionImgFalse from "../images/UnionFalse.png"
 function InfoTooltip({ isOpen, onClose, isAuthorization }) {
     return (
         <div className={isOpen ? `popup popup_opened` : `popup`}>
-            <form className="popup__container">
+            <div className="popup__container">
                 <button
                     className="popup__button-close"
                     type="button"
@@ -15,12 +15,13 @@ function InfoTooltip({ isOpen, onClose, isAuthorization }) {
                 <img
                     className="popup__union"
                     src={isAuthorization ? unionImgTrue : unionImgFalse}
+                    alt={isAuthorization ? 'Картинка успеха' : 'Картинка ошибки'}
                 />
                 <h2
                     className="popup__info-text">
                     {isAuthorization ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
                 </h2>
-            </form>
+            </div>
         </div>
     )
 }

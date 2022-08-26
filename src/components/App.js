@@ -19,13 +19,14 @@ import ProtectedRoute from './ProtectedRoute';
 
 function App() {
 
-  const [currentUser, setCurrentUser] = React.useState("");
+  const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddCardPopupOpen, setIsAddCardPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
+
 
   const [loggedIn, setloggedIn] = React.useState(false);
   const [email, setEmail] = React.useState('')
@@ -102,11 +103,17 @@ function App() {
       api.putLike(card._id)
         .then((newCard) => {
           setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        })
+        .catch((err) => {
+          console.log(`${err}`);
         });
     } else {
       api.deleteLike(card._id)
         .then((newCard) => {
           setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        })
+        .catch((err) => {
+          console.log(`${err}`);
         });
     }
   }
@@ -135,14 +142,15 @@ function App() {
       .then((res) => {
         setloggedIn(true);
         setIsAuthorization(true);
-        setIsInfoTooltipPopupOpen(true);
         setEmail(data.email);
         history.push('/');
       })
       .catch((err) => {
         setIsAuthorization(false);
-        setIsInfoTooltipPopupOpen(true);
         console.log(`Ошибка: ${err}`)
+      })
+      .finally(() => {
+        setIsInfoTooltipPopupOpen(true);
       })
   }
 
@@ -152,14 +160,12 @@ function App() {
         if (res.token) {
           setloggedIn(true);
           setIsAuthorization(true);
-          setIsInfoTooltipPopupOpen(true);
           setEmail(data.email);
           history.push('/');
         }
       })
       .catch((err) => {
         setIsAuthorization(false);
-        setIsInfoTooltipPopupOpen(true);
         console.log(`Ошибка: ${err}`)
       })
   }
@@ -173,7 +179,7 @@ function App() {
     // эта функция проверит, действующий он или нет
     const token = localStorage.getItem('token');
     if (token) {
-      apiAuth.getContent(token)
+      apiAuth.checkToken(token)
         .then((res) => {
           if (res) {
             setloggedIn(true);
@@ -236,7 +242,7 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
         />
-        <PopupWithForm name="confirm-message" title="Вы уверены?" buttonSave="Да"></PopupWithForm>
+        <PopupWithForm name="confirm-message" title="Вы уверены?" buttonSave="Да" />
         <ImagePopup
           card={selectedCard}
           isOpen={isImagePopupOpen}

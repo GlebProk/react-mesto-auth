@@ -53,7 +53,7 @@ export function authorize(data) {
 };
 
 // отправляем запрос на роут аутентификации
-export function getContent(token) {
+export function checkToken(token) {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {

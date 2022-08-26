@@ -38,7 +38,7 @@ function Register({ onRegister }) {
                 />
                 <input
                     className="form__input form__input_pass"
-                    type="text"
+                    type="password"
                     id="userPass"
                     placeholder="Пароль"
                     onChange={handleInputPassword}
